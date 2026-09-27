@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>receotp API — Dokumentasi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #ffffff;
+  --bg-elev: #fafbfc;
+  --bg-side: #f5f7fa;
+  --border: #e4e7ec;
+  --border-strong: #cdd3dc;
+  --text: #101828;
+  --text-2: #475467;
+  --text-3: #98a2b3;
+  --accent: #0d6efd;
+  --accent-2: #0b5ed7;
+  --code-bg: #0d1117;
+  --code-text: #e6edf3;
+  --code-bar: #161b22;
+  --code-border: #30363d;
+  --tab-active: #0d6efd;
+  --success: #12b76a;
+  --warning: #f79009;
+  --error: #f04438;
+  --method-get: #12b76a;
+  --method-post: #f79009;
+  --method-put: #6941c6;
+  --method-del: #f04438;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,.04);
+  --shadow: 0 4px 12px rgba(16,24,40,.08);
+  --radius: 8px;
+  --radius-sm: 6px;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0f17;
+  --bg-elev: #111826;
+  --bg-side: #0e1420;
+  --border: #1f2937;
+  --border-strong: #374151;
+  --text: #e5e7eb;
+  --text-2: #9ca3af;
+  --text-3: #6b7280;
+  --accent: #60a5fa;
+  --accent-2: #3b82f6;
+  --code-bg: #05080f;
+  --code-text: #e6edf3;
+  --code-bar: #0e1420;
+  --code-border: #1f2937;
+  --shadow: 0 4px 12px rgba(0,0,0,.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0f17;
+    --bg-elev: #111826;
+    --bg-side: #0e1420;
+    --border: #1f2937;
+    --border-strong: #374151;
+    --text: #e5e7eb;
+    --text-2: #9ca3af;
+    --text-3: #6b7280;
+    --accent: #60a5fa;
+    --accent-2: #3b82f6;
+    --code-bg: #05080f;
+    --code-text: #e6edf3;
+    --code-bar: #0e1420;
+    --code-border: #1f2937;
+    --shadow: 0 4px 12px rgba(0,0,0,.4);
+  }
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+code, pre, kbd { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.app { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .app { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--bg-side);
+  border-right: 1px solid var(--border);
+  padding: 20px 16px 32px;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+@media (max-width: 900px) {
+  .sidebar { position: fixed; left: -100%; z-index: 30; width: 280px; transition: left .2s; box-shadow: var(--shadow); }
+  .sidebar.open { left: 0; }
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 8px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.brand-mark {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: linear-gradient(135deg, #0d6efd, #6941c6);
+  color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px;
+}
+.brand-name { font-weight: 700; font-size: 15px; letter-spacing: -.01em; }
+.brand-sub { font-size: 11px; color: var(--text-3); }
+
+.search { position: relative; margin-bottom: 16px; }
+.search input {
+  width: 100%; padding: 8px 10px 8px 30px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: inherit; font-size: 13px;
+  outline: none;
+}
+.search input:focus { border-color: var(--accent); }
+.search::before {
+  content: ""; position: absolute; top: 50%; left: 10px;
+  width: 12px; height: 12px; transform: translateY(-50%);
+  background: currentColor; opacity: .5;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>") center/contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>") center/contain no-repeat;
+}
+.nav-group { margin-bottom: 18px; }
+.nav-group-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--text-3); text-transform: uppercase; padding: 4px 8px 6px; }
+.nav-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; color: var(--text-2); font-size: 13px; cursor: pointer; }
+.nav-item:hover { background: rgba(0,0,0,.04); color: var(--text); text-decoration: none; }
+:root[data-theme="dark"] .nav-item:hover { background: rgba(255,255,255,.05); }
+.nav-item.active { background: var(--accent); color: #fff; }
+.nav-item.active .method { background: rgba(255,255,255,.2); color: #fff; }
+.method { display: inline-block; padding: 1px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; min-width: 40px; text-align: center; }
+.method.get { background: rgba(18,183,106,.15); color: var(--method-get); }
+.method.post { background: rgba(247,144,9,.15); color: var(--method-post); }
+.method.put { background: rgba(105,65,198,.15); color: var(--method-put); }
+.method.del { background: rgba(240,68,56,.15); color: var(--method-del); }
+
+.main { padding: 24px 40px 80px; max-width: 100%; overflow-x: hidden; }
+@media (max-width: 700px) { .main { padding: 16px 20px 60px; } }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 16px; }
+.hamburger { display: none; padding: 8px 10px; background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); cursor: pointer; }
+@media (max-width: 900px) { .hamburger { display: inline-flex; } }
+.hamburger svg { width: 18px; height: 18px; }
+
+.btn-icon { padding: 6px 10px; background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font: inherit; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.btn-icon:hover { border-color: var(--border-strong); }
+.btn-icon svg { width: 14px; height: 14px; }
+
+h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+h2 { font-size: 20px; font-weight: 700; letter-spacing: -.01em; margin: 32px 0 12px; }
+h3 { font-size: 15px; font-weight: 600; margin: 20px 0 8px; color: var(--text-2); text-transform: uppercase; letter-spacing: .04em; }
+p { margin-bottom: 12px; color: var(--text-2); }
+p.lead { font-size: 15px; color: var(--text-2); margin-bottom: 24px; }
+
+.callout { padding: 12px 14px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-elev); margin: 12px 0; font-size: 13px; }
+.callout.warn { border-color: rgba(247,144,9,.4); background: rgba(247,144,9,.06); }
+.callout.info { border-color: rgba(13,110,253,.3); background: rgba(13,110,253,.06); }
+.callout code { background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 4px; }
+:root[data-theme="dark"] .callout code { background: rgba(255,255,255,.08); }
+
+.endpoint { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 32px; overflow: hidden; background: var(--bg-elev); scroll-margin-top: 20px; }
+.endpoint-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: var(--bg); flex-wrap: wrap; }
+.endpoint-header .method { font-size: 12px; padding: 3px 10px; min-width: 52px; }
+.endpoint-header .path { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text); font-weight: 500; word-break: break-all; }
+.endpoint-body { padding: 16px; }
+.endpoint-body h3:first-child { margin-top: 0; }
+
+table.params { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 8px; display: block; overflow-x: auto; }
+table.params th, table.params td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.params th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--text-3); background: var(--bg); white-space: nowrap; }
+table.params td code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+:root[data-theme="dark"] table.params td code { background: rgba(255,255,255,.06); }
+table.params td.req { color: var(--error); font-size: 11px; font-weight: 600; }
+table.params td.opt { color: var(--text-3); font-size: 11px; }
+
+.code-block { border: 1px solid var(--code-border); border-radius: var(--radius); overflow: hidden; margin: 8px 0 12px; background: var(--code-bg); }
+.code-tabs { display: flex; background: var(--code-bar); border-bottom: 1px solid var(--code-border); padding: 0 8px; align-items: center; gap: 4px; flex-wrap: wrap; }
+.code-tab { padding: 8px 12px; background: none; border: none; color: #8b949e; font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.code-tab:hover { color: #e6edf3; }
+.code-tab.active { color: #e6edf3; border-bottom-color: var(--accent); }
+.code-copy { margin-left: auto; padding: 6px 10px; background: transparent; border: 1px solid var(--code-border); border-radius: 4px; color: #8b949e; font: inherit; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.code-copy:hover { color: #e6edf3; border-color: #6b7280; }
+.code-copy.copied { color: var(--success); border-color: var(--success); }
+.code-copy svg { width: 12px; height: 12px; }
+.code-panels { position: relative; }
+.code-panel { display: none; }
+.code-panel.active { display: block; }
+.code-panel pre { padding: 14px 16px; overflow-x: auto; color: var(--code-text); font-size: 12.5px; line-height: 1.55; white-space: pre; max-height: 480px; }
+
+.tok-str  { color: #a5d6ff; }
+.tok-num  { color: #79c0ff; }
+.tok-key  { color: #ff7b72; }
+.tok-bool { color: #79c0ff; }
+.tok-com  { color: #8b949e; font-style: italic; }
+.tok-fn   { color: #d2a8ff; }
+.tok-op   { color: #ff7b72; }
+.tok-var  { color: #ffa657; }
+
+.status { display: inline-block; padding: 2px 8px; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; margin-right: 6px; }
+.status.s2xx { background: rgba(18,183,106,.15); color: var(--success); }
+.status.s4xx { background: rgba(247,144,9,.15); color: var(--warning); }
+.status.s5xx { background: rgba(240,68,56,.15); color: var(--error); }
+
+.divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+.backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 25; }
+.backdrop.show { display: block; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 8px 14px; background: var(--text); color: var(--bg); border-radius: 999px; font-size: 12px; font-weight: 500; opacity: 0; pointer-events: none; transition: all .2s; z-index: 100; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="backdrop" id="backdrop"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">J</div>
+      <div>
+        <div class="brand-name">receotp API</div>
+        <div class="brand-sub">v1.0 &middot; REST</div>
+      </div>
+    </div>
+    <div class="search">
+      <input id="q" type="search" placeholder="Cari endpoint..." autocomplete="off" />
+    </div>
+
+    <nav id="nav">
+      <div class="nav-group">
+        <div class="nav-group-title">Mulai</div>
+        <a class="nav-item" href="#intro"><span class="method">DOC</span>Perkenalan</a>
+        <a class="nav-item" href="#auth"><span class="method">DOC</span>Autentikasi</a>
+        <a class="nav-item" href="#errors"><span class="method">DOC</span>Kode Error</a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Akun</div>
+        <a class="nav-item" href="#balance"><span class="method get">GET</span>Saldo</a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">OTP</div>
+        <a class="nav-item" href="#countries"><span class="method get">GET</span>Negara</a>
+        <a class="nav-item" href="#services"><span class="method get">GET</span>Layanan</a>
+        <a class="nav-item" href="#order"><span class="method post">POST</span>Order</a>
+        <a class="nav-item" href="#status"><span class="method get">GET</span>Status</a>
+        <a class="nav-item" href="#retry"><span class="method post">POST</span>Retry Code</a>
+        <a class="nav-item" href="#finish"><span class="method post">POST</span>Finish</a>
+        <a class="nav-item" href="#cancel"><span class="method post">POST</span>Cancel</a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Telegram</div>
+        <a class="nav-item" href="#tg-countries"><span class="method get">GET</span>Negara TG</a>
+        <a class="nav-item" href="#tg-order"><span class="method post">POST</span>Order TG</a>
+        <a class="nav-item" href="#tg-code"><span class="method post">POST</span>Ambil Kode</a>
+        <a class="nav-item" href="#tg-release"><span class="method post">POST</span>Release Nomor</a>
+        <a class="nav-item" href="#tg-orders"><span class="method get">GET</span>List Order TG</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      </button>
+      <div style="flex:1"></div>
+      <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">
+        <svg id="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <span id="theme-label">Tema</span>
+      </button>
+    </div>
+
+    <section id="intro">
+      <h1>receotp API</h1>
+      <p class="lead">API RESTful untuk pembelian nomor OTP &amp; nomor Telegram siap-pakai. Semua respons berupa JSON.</p>
+
+      <h3>Base URL</h3>
+      <div class="code-block" data-lang="text">
+        <div class="code-tabs">
+          <button class="code-tab active">Base URL</button>
+          <button class="code-copy" data-copy>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy</span>
+          </button>
+        </div>
+        <div class="code-panels"><div class="code-panel active"><pre>https://receotp.my.id</pre></div></div>
+      </div>
+
+      <div class="callout info">
+        Semua contoh di halaman ini pakai base URL di atas.
+      </div>
+    </section>
+
+    <section id="auth">
+      <h2>Autentikasi</h2>
+      <p>Setiap request ke endpoint <code>/api/*</code> wajib membawa API key lewat header <code>x-api-key</code>, atau via query <code>?apikey=</code>. Ambil key lo lewat bot Telegram kami: kirim command <code>/apikey</code>.</p>
+
+      <div class="code-block">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="curl">cURL</button>
+          <button class="code-tab" data-tab="js">Node.js</button>
+          <button class="code-tab" data-tab="py">Python</button>
+          <button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button>
+        </div>
+        <div class="code-panels">
+          <div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> https://receotp.my.id/api/balance <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span></pre></div>
+          <div class="code-panel" data-panel="js"><pre><span class="tok-key">const</span> res = <span class="tok-key">await</span> <span class="tok-fn">fetch</span>(<span class="tok-str">"https://receotp.my.id/api/balance"</span>, {
+  headers: { <span class="tok-str">"x-api-key"</span>: <span class="tok-str">"jm_xxx"</span> }
+});
+<span class="tok-key">const</span> data = <span class="tok-key">await</span> res.<span class="tok-fn">json</span>();</pre></div>
+          <div class="code-panel" data-panel="py"><pre><span class="tok-key">import</span> requests
+r = requests.<span class="tok-fn">get</span>(
+  <span class="tok-str">"https://receotp.my.id/api/balance"</span>,
+  headers={<span class="tok-str">"x-api-key"</span>: <span class="tok-str">"jm_xxx"</span>}
+)
+data = r.<span class="tok-fn">json</span>()</pre></div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <b>Jaga kerahasiaan API key.</b> Jangan pernah share atau embed di client-side app. Kalau bocor, generate ulang lewat command <code>/apikey</code> di bot.
+      </div>
+    </section>
+
+    <section id="errors">
+      <h2>Kode Error</h2>
+      <p>Semua error response berformat sama:</p>
+      <div class="code-block">
+        <div class="code-tabs">
+          <button class="code-tab active">JSON</button>
+          <button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button>
+        </div>
+        <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">false</span>,
+  <span class="tok-str">"error"</span>: <span class="tok-str">"NO_SALDO"</span>,
+  <span class="tok-str">"message"</span>: <span class="tok-str">"Saldo kamu tidak cukup."</span>
+}</pre></div></div>
+      </div>
+
+      <table class="params">
+        <thead><tr><th>Status</th><th>Error Code</th><th>Kapan Muncul</th></tr></thead>
+        <tbody>
+          <tr><td><span class="status s4xx">401</span></td><td><code>NO_API_KEY</code> / <code>INVALID_API_KEY</code></td><td>API key kosong / salah / dicabut</td></tr>
+          <tr><td><span class="status s4xx">400</span></td><td><code>BAD_REQUEST</code></td><td>Field wajib tidak diisi</td></tr>
+          <tr><td><span class="status s4xx">402</span></td><td><code>NO_SALDO</code></td><td>Saldo tidak cukup</td></tr>
+          <tr><td><span class="status s4xx">404</span></td><td><code>NOT_FOUND</code></td><td>Resource tidak ditemukan</td></tr>
+          <tr><td><span class="status s4xx">409</span></td><td><code>NO_STOK</code></td><td>Stok habis</td></tr>
+          <tr><td><span class="status s4xx">409</span></td><td><code>OTP_NOT_RECEIVED</code></td><td>Belum ada kode, tidak bisa retry/finish</td></tr>
+          <tr><td><span class="status s5xx">502</span></td><td><code>UPSTREAM_ERROR</code> / <code>ORDER_FAILED</code></td><td>Gagal menghubungi provider</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="divider"></div>
+
+    <article class="endpoint" id="balance">
+      <div class="endpoint-header"><span class="method get">GET</span><span class="path">/api/balance</span></div>
+      <div class="endpoint-body">
+        <p>Cek saldo untuk API key ini. Saldo ini <b>sama</b> dengan saldo bot Telegram kamu.</p>
+        <div class="code-block">
+          <div class="code-tabs">
+            <button class="code-tab active" data-tab="curl">cURL</button>
+            <button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button>
+          </div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> https://receotp.my.id/api/balance <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span></h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{ <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>, <span class="tok-str">"saldo"</span>: <span class="tok-num">15000</span> }</pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="countries">
+      <div class="endpoint-header"><span class="method get">GET</span><span class="path">/api/countries</span></div>
+      <div class="endpoint-body">
+        <p>Daftar semua negara yang didukung untuk order OTP.</p>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> https://receotp.my.id/api/countries <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span></h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"countries"</span>: [
+    { <span class="tok-str">"id"</span>: <span class="tok-num">6</span>, <span class="tok-str">"name"</span>: <span class="tok-str">"Indonesia"</span>, <span class="tok-str">"iso"</span>: <span class="tok-str">"id"</span> }
+  ]
+}</pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="services">
+      <div class="endpoint-header"><span class="method get">GET</span><span class="path">/api/services</span></div>
+      <div class="endpoint-body">
+        <p>Daftar layanan (WhatsApp, Facebook, dst) beserta harga &amp; stok untuk negara tertentu. Harga sudah termasuk markup kami.</p>
+        <table class="params">
+          <thead><tr><th>Nama</th><th>Tipe</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody><tr><td><code>country</code></td><td>string</td><td class="req">Ya</td><td>ISO negara (mis. <code>id</code>) atau ID numerik</td></tr></tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> <span class="tok-str">"https://receotp.my.id/api/services?country=id"</span> <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span></h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"services"</span>: [
+    { <span class="tok-str">"code"</span>: <span class="tok-str">"wa"</span>, <span class="tok-str">"name"</span>: <span class="tok-str">"Whatsapp"</span>, <span class="tok-str">"price"</span>: <span class="tok-num">4477</span>, <span class="tok-str">"stock"</span>: <span class="tok-num">8162</span> }
+  ]
+}</pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="order">
+      <div class="endpoint-header"><span class="method post">POST</span><span class="path">/api/order</span></div>
+      <div class="endpoint-body">
+        <p>Buat order OTP baru. Saldo dipotong <b>saat itu juga</b>. Kalau order gagal / stok habis, saldo otomatis dikembalikan.</p>
+        <table class="params">
+          <thead><tr><th>Nama</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody>
+            <tr><td><code>country</code></td><td class="req">Ya</td><td>ISO atau ID negara</td></tr>
+            <tr><td><code>service</code></td><td class="req">Ya</td><td>Service code (mis. <code>wa</code>, <code>fb</code>)</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> -X POST https://receotp.my.id/api/order <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span> <span class="tok-op">\</span>
+  -H <span class="tok-str">"Content-Type: application/json"</span> <span class="tok-op">\</span>
+  -d <span class="tok-str">'{"country":"id","service":"wa"}'</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span></h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"activationId"</span>: <span class="tok-str">"1234567890"</span>,
+  <span class="tok-str">"phone"</span>: <span class="tok-str">"+6281234567890"</span>,
+  <span class="tok-str">"service"</span>: <span class="tok-str">"wa"</span>,
+  <span class="tok-str">"country"</span>: <span class="tok-str">"id"</span>,
+  <span class="tok-str">"price"</span>: <span class="tok-num">4477</span>,
+  <span class="tok-str">"saldoSisa"</span>: <span class="tok-num">10523</span>
+}</pre></div></div>
+        </div>
+        <div class="callout warn">Order auto-expire <b>15 menit</b> kalau OTP tidak diterima. Saldo otomatis di-refund.</div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="status">
+      <div class="endpoint-header"><span class="method get">GET</span><span class="path">/api/status/:activationId</span></div>
+      <div class="endpoint-body">
+        <p>Cek status order &amp; ambil kode OTP. Poll setiap ~5 detik.</p>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> https://receotp.my.id/api/status/1234567890 <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span> — OTP diterima</h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"state"</span>: <span class="tok-str">"sukses"</span>,
+  <span class="tok-str">"hasOtp"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"otp"</span>: <span class="tok-str">"123456"</span>
+}</pre></div></div>
+        </div>
+        <table class="params">
+          <thead><tr><th>State</th><th>Arti</th></tr></thead>
+          <tbody>
+            <tr><td><code>waiting</code></td><td>Menunggu OTP masuk</td></tr>
+            <tr><td><code>sukses</code></td><td>OTP diterima</td></tr>
+            <tr><td><code>cancel</code></td><td>Order dibatalkan (saldo di-refund otomatis)</td></tr>
+            <tr><td><code>expired</code></td><td>Order sudah expired 15 menit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="endpoint" id="retry">
+      <div class="endpoint-header"><span class="method post">POST</span><span class="path">/api/retry-code</span></div>
+      <div class="endpoint-body">
+        <p>Minta kode OTP baru untuk nomor yang sama (setelah kode pertama sudah diterima).</p>
+        <table class="params">
+          <thead><tr><th>Nama</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody><tr><td><code>activationId</code></td><td class="req">Ya</td><td>ID order dari <code>/api/order</code></td></tr></tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> -X POST https://receotp.my.id/api/retry-code <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span> <span class="tok-op">\</span>
+  -H <span class="tok-str">"Content-Type: application/json"</span> <span class="tok-op">\</span>
+  -d <span class="tok-str">'{"activationId":"1234567890"}'</span></pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="finish">
+      <div class="endpoint-header"><span class="method post">POST</span><span class="path">/api/finish</span></div>
+      <div class="endpoint-body">
+        <p>Tandai order selesai setelah selesai pakai kode.</p>
+        <table class="params">
+          <thead><tr><th>Nama</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody><tr><td><code>activationId</code></td><td class="req">Ya</td><td>ID order</td></tr></tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> -X POST https://receotp.my.id/api/finish <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span> <span class="tok-op">\</span>
+  -H <span class="tok-str">"Content-Type: application/json"</span> <span class="tok-op">\</span>
+  -d <span class="tok-str">'{"activationId":"1234567890"}'</span></pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="cancel">
+      <div class="endpoint-header"><span class="method post">POST</span><span class="path">/api/cancel</span></div>
+      <div class="endpoint-body">
+        <p>Batalkan order &amp; refund saldo. Hanya boleh kalau <b>belum menerima OTP</b>.</p>
+        <table class="params">
+          <thead><tr><th>Nama</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody><tr><td><code>activationId</code></td><td class="req">Ya</td><td>ID order</td></tr></tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> -X POST https://receotp.my.id/api/cancel <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span> <span class="tok-op">\</span>
+  -H <span class="tok-str">"Content-Type: application/json"</span> <span class="tok-op">\</span>
+  -d <span class="tok-str">'{"activationId":"1234567890"}'</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span></h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"activationId"</span>: <span class="tok-str">"1234567890"</span>,
+  <span class="tok-str">"refunded"</span>: <span class="tok-num">4477</span>,
+  <span class="tok-str">"saldoSisa"</span>: <span class="tok-num">15000</span>
+}</pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <div class="divider"></div>
+    <h2>Telegram — Nomor Siap Pakai</h2>
+    <p>Endpoint khusus untuk beli nomor Telegram yang sudah login.</p>
+
+    <article class="endpoint" id="tg-countries">
+      <div class="endpoint-header"><span class="method get">GET</span><span class="path">/api/telegram/countries</span></div>
+      <div class="endpoint-body">
+        <p>Daftar negara Telegram yang tersedia beserta harga &amp; stok.</p>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> https://receotp.my.id/api/telegram/countries <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span></h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"countries"</span>: [
+    { <span class="tok-str">"code"</span>: <span class="tok-str">"US"</span>, <span class="tok-str">"name"</span>: <span class="tok-str">"US"</span>, <span class="tok-str">"flag"</span>: <span class="tok-str">"🇺🇸"</span>, <span class="tok-str">"price"</span>: <span class="tok-num">11500</span>, <span class="tok-str">"stock"</span>: <span class="tok-num">19</span> }
+  ]
+}</pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="tg-order">
+      <div class="endpoint-header"><span class="method post">POST</span><span class="path">/api/telegram/order</span></div>
+      <div class="endpoint-body">
+        <p>Beli 1 nomor Telegram. Saldo langsung dipotong sesuai harga negara itu.</p>
+        <table class="params">
+          <thead><tr><th>Nama</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody><tr><td><code>country</code></td><td class="req">Ya</td><td>Country code, mis. <code>US</code>, <code>ID</code>, <code>GB</code></td></tr></tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> -X POST https://receotp.my.id/api/telegram/order <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span> <span class="tok-op">\</span>
+  -H <span class="tok-str">"Content-Type: application/json"</span> <span class="tok-op">\</span>
+  -d <span class="tok-str">'{"country":"US"}'</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span></h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"orderId"</span>: <span class="tok-str">"tg_a1b2c3d4e5f6a7b8"</span>,
+  <span class="tok-str">"phone"</span>: <span class="tok-str">"+12025550100"</span>,
+  <span class="tok-str">"country"</span>: <span class="tok-str">"US"</span>,
+  <span class="tok-str">"price"</span>: <span class="tok-num">11500</span>,
+  <span class="tok-str">"saldoSisa"</span>: <span class="tok-num">5000</span>
+}</pre></div></div>
+        </div>
+        <div class="callout info">Simpan <code>orderId</code>. Panggil <code>/api/telegram/code</code> saat Telegram kirim OTP.</div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="tg-code">
+      <div class="endpoint-header"><span class="method post">POST</span><span class="path">/api/telegram/code</span></div>
+      <div class="endpoint-body">
+        <p>Ambil kode login Telegram. Bisa dipanggil kapan saja selama order belum di-release.</p>
+        <table class="params">
+          <thead><tr><th>Nama</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody><tr><td><code>orderId</code></td><td class="req">Ya</td><td>ID order dari <code>/api/telegram/order</code></td></tr></tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> -X POST https://receotp.my.id/api/telegram/code <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span> <span class="tok-op">\</span>
+  -H <span class="tok-str">"Content-Type: application/json"</span> <span class="tok-op">\</span>
+  -d <span class="tok-str">'{"orderId":"tg_a1b2c3d4e5f6a7b8"}'</span></pre></div></div>
+        </div>
+        <h3>Response <span class="status s2xx">200</span> — Kode diterima</h3>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active">JSON</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active"><pre>{
+  <span class="tok-str">"ok"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-str">"orderId"</span>: <span class="tok-str">"tg_a1b2c3d4e5f6a7b8"</span>,
+  <span class="tok-str">"state"</span>: <span class="tok-str">"ok"</span>,
+  <span class="tok-str">"phone"</span>: <span class="tok-str">"+12025550100"</span>,
+  <span class="tok-str">"code"</span>: <span class="tok-str">"12345"</span>
+}</pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="tg-release">
+      <div class="endpoint-header"><span class="method post">POST</span><span class="path">/api/telegram/release</span></div>
+      <div class="endpoint-body">
+        <p>Notifikasi <b>"saya sudah selesai pakai nomor ini"</b>. Setelah release, nomor tidak bisa diakses lagi via <code>/api/telegram/code</code>.</p>
+        <table class="params">
+          <thead><tr><th>Nama</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody><tr><td><code>orderId</code></td><td class="req">Ya</td><td>ID order</td></tr></tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> -X POST https://receotp.my.id/api/telegram/release <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span> <span class="tok-op">\</span>
+  -H <span class="tok-str">"Content-Type: application/json"</span> <span class="tok-op">\</span>
+  -d <span class="tok-str">'{"orderId":"tg_a1b2c3d4e5f6a7b8"}'</span></pre></div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="endpoint" id="tg-orders">
+      <div class="endpoint-header"><span class="method get">GET</span><span class="path">/api/telegram/orders</span></div>
+      <div class="endpoint-body">
+        <p>List semua order Telegram aktif milik API key ini (belum di-release).</p>
+        <div class="code-block">
+          <div class="code-tabs"><button class="code-tab active" data-tab="curl">cURL</button><button class="code-copy" data-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div>
+          <div class="code-panels"><div class="code-panel active" data-panel="curl"><pre><span class="tok-fn">curl</span> https://receotp.my.id/api/telegram/orders <span class="tok-op">\</span>
+  -H <span class="tok-str">"x-api-key: jm_xxx"</span></pre></div></div>
+        </div>
+      </div>
+    </article>
+
+  </main>
+</div>
+
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('theme-toggle');
+  const label = document.getElementById('theme-label');
+  const stored = localStorage.getItem('theme');
+  if (stored === 'light' || stored === 'dark') root.setAttribute('data-theme', stored);
+  const syncLabel = () => {
+    const t = root.getAttribute('data-theme') || 'light';
+    label.textContent = t === 'dark' ? 'Light' : 'Dark';
+  };
+  syncLabel();
+  themeBtn.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme') || 'light';
+    const next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    syncLabel();
+  });
+
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('backdrop');
+  const hamburger = document.getElementById('hamburger');
+  const closeSide = () => { sidebar.classList.remove('open'); backdrop.classList.remove('show'); };
+  const openSide  = () => { sidebar.classList.add('open');    backdrop.classList.add('show'); };
+  hamburger.addEventListener('click', openSide);
+  backdrop.addEventListener('click', closeSide);
+  sidebar.addEventListener('click', e => { if (e.target.closest('.nav-item')) closeSide(); });
+
+  const navLinks = new Map();
+  document.querySelectorAll('.nav-item').forEach(a => {
+    const id = a.getAttribute('href')?.slice(1);
+    if (id) navLinks.set(id, a);
+  });
+  const setActive = id => {
+    navLinks.forEach(a => a.classList.remove('active'));
+    navLinks.get(id)?.classList.add('active');
+  };
+  const io = new IntersectionObserver(entries => {
+    const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio);
+    if (visible.length) setActive(visible[0].target.id);
+  }, { rootMargin: '-30% 0px -60% 0px', threshold: [0, 0.25, 0.5, 1] });
+  navLinks.forEach((_, id) => {
+    const el = document.getElementById(id);
+    if (el) io.observe(el);
+  });
+
+  const q = document.getElementById('q');
+  q.addEventListener('input', () => {
+    const term = q.value.trim().toLowerCase();
+    document.querySelectorAll('.nav-group').forEach(g => {
+      let any = false;
+      g.querySelectorAll('.nav-item').forEach(item => {
+        const match = !term || item.textContent.toLowerCase().includes(term);
+        item.style.display = match ? '' : 'none';
+        if (match) any = true;
+      });
+      g.style.display = any ? '' : 'none';
+    });
+  });
+
+  document.querySelectorAll('.code-block').forEach(block => {
+    const tabs = block.querySelectorAll('.code-tab[data-tab]');
+    const panels = block.querySelectorAll('.code-panel[data-panel]');
+    if (!tabs.length) return;
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const key = tab.dataset.tab;
+        tabs.forEach(t => t.classList.toggle('active', t === tab));
+        panels.forEach(p => p.classList.toggle('active', p.dataset.panel === key));
+      });
+    });
+  });
+
+  const toast = document.getElementById('toast');
+  const showToast = (msg) => {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 1400);
+  };
+  document.querySelectorAll('.code-copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const block = btn.closest('.code-block');
+      const active = block.querySelector('.code-panel.active pre') || block.querySelector('.code-panel pre');
+      if (!active) return;
+      const text = active.textContent;
+      try { await navigator.clipboard.writeText(text); }
+      catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed'; ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch {}
+        ta.remove();
+      }
+      const label = btn.querySelector('span');
+      const original = label ? label.textContent : '';
+      if (label) label.textContent = 'Copied';
+      btn.classList.add('copied');
+      showToast('Tersalin');
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        if (label) label.textContent = original || 'Copy';
+      }, 1400);
+    });
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (!el) return;
+      e.preventDefault();
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.pushState(null, '', '#' + id);
+    });
+  });
+})();
+</script>
+</body>
+</html>
